@@ -127,7 +127,20 @@
 
 
         /* --- mobil uygulama davranisi --- */
-        html, body { overscroll-behavior: none; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+        html, body {
+            overscroll-behavior: none;
+            touch-action: manipulation;
+            -webkit-user-select: none; user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0; padding: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            overflow: hidden !important;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            overscroll-behavior-y: none;
+        }
         body { background-color: var(--bg-grad-2); margin:0; padding:0; }
         img { -webkit-touch-callout: none; -webkit-user-drag: none; user-drag: none; }
         @media (prefers-reduced-motion: reduce) {
@@ -135,7 +148,7 @@
             .item, .order-chip-icon { transition: none; }
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
-        body { font-family: 'Nunito', 'Baloo 2', 'Segoe UI', Tahoma, Arial, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2) 55%, var(--bg-grad-3)); background-size: 220% 220%; animation: bgFlow 18s ease infinite; color: var(--text-main); margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; transition: background 1s ease; position: relative; }
+        body { font-family: 'Nunito', 'Baloo 2', 'Segoe UI', Tahoma, Arial, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2) 55%, var(--bg-grad-3)); background-size: 220% 220%; animation: bgFlow 18s ease infinite; color: var(--text-main); margin: 0; padding: 0; height: 100%; height: 100dvh; max-height: 100dvh; display: flex; flex-direction: column; overflow: hidden; transition: background 1s ease; position: fixed; top: 0; left: 0; width: 100%; }
         @keyframes bgFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         .bg-blobs { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
@@ -315,6 +328,9 @@
         @keyframes cardPopIn { 0% { transform: scale(0.85) translateY(14px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
         .app-title { font-family: 'Baloo 2', 'Nunito', sans-serif; font-size: 26px; font-weight: 800; margin: 0; text-shadow: 0 4px 15px var(--text-glow); line-height: 1.25; }
         .app-title .toy-emoji { display: inline-block; animation: wiggle 2.4s ease-in-out infinite; }
+        #customersArea:empty::after {
+            content: ''; display: block; width: 210px; height: 100%;
+        }
         @keyframes bkPop { 0%{transform:scale(.3);opacity:0} 55%{transform:scale(1.25);opacity:1} 100%{transform:scale(1);opacity:1} }
         #lowCoinWarn.show { opacity:1 !important; transform:translateY(0) !important; animation:warnPulse 1s ease-in-out infinite; }
         @keyframes warnPulse { 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.4)} }
@@ -350,7 +366,7 @@
         .strategy-grid { display: flex; flex-direction: column; gap: 8px; width: 100%; text-align: left; }
         .strategy-card { background: rgba(255, 255, 255, 0.35); border: 2px solid rgba(255, 255, 255, 0.6); border-radius: 14px; padding: 10px; display: flex; flex-direction: column; gap: 4px; }
         
-        .top-bar { padding: 7px 14px; padding-top: 7px; display: flex; flex-direction: column; gap: 6px; background: rgba(0,0,0,0.1); border-bottom: 1px solid var(--panel-border); }
+        .top-bar { flex: 0 0 auto; padding: 7px 14px; padding-top: 7px; display: flex; flex-direction: column; gap: 6px; background: rgba(0,0,0,0.1); border-bottom: 1px solid var(--panel-border); }
         .stats-row { display: flex; justify-content: space-between; align-items: center; font-weight: 900; font-size: 14px; gap: 6px; position: relative; }
         .stats-left { display: flex; gap: 8px; align-items: center; min-width: 0; flex: 1 1 0; }
         .stats-right { display: flex; gap: 8px; align-items: center; justify-content: flex-end; min-width: 0; flex: 1 1 0; }
@@ -382,9 +398,9 @@
         @keyframes pulseCuteFast { 0% { transform: scale(1); } 100% { transform: scale(1.08); } }
         @keyframes popCuteActive { 0% { transform: scale(1) rotate(-2deg); } 100% { transform: scale(1.06) rotate(2deg); } }
 
-        .customers-area { display: flex; gap: 8px; padding: 6px 12px; overflow-x: auto; overflow-y: hidden; overscroll-behavior: contain; scroll-behavior: smooth; min-height: 0; flex-shrink: 0; align-items: center; justify-content: center; scrollbar-width: none; -ms-overflow-style: none; }
+        .customers-area { flex: 0 0 122px; height: 122px; min-height: 122px; max-height: 122px; display: flex; gap: 8px; padding: 6px 12px; overflow-x: auto; overflow-y: hidden; overscroll-behavior: contain; scroll-behavior: smooth; align-items: center; justify-content: center; scrollbar-width: none; -ms-overflow-style: none; }
         .customers-area::-webkit-scrollbar { display: none; }
-        .customer-card { flex: 0 0 210px; width: 210px; min-height: 0; background: var(--panel-bg); border: 2px solid var(--panel-border); border-radius: 16px; padding: 8px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 6px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.3); position: relative; cursor: pointer; transition: transform 0.2s, background 0.3s; contain: layout; }
+        .customer-card { flex: 0 0 210px; width: 210px; height: 100%; min-height: 0; background: var(--panel-bg); border: 2px solid var(--panel-border); border-radius: 16px; padding: 8px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 6px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.3); position: relative; cursor: pointer; transition: transform 0.2s, background 0.3s; contain: layout; }
         .customer-card.ready { background: #55efc4; border-color: #00b894; transform: scale(1.05); animation: pulseGreen 1s infinite alternate; box-shadow: 0 0 20px rgba(0,184,148,0.5); }
         .customer-card.fly-to-customer { animation: flyToCustomerAnim 0.4s ease-in-out; }
         .order-chip-icon.chip-pop { animation: chipPop 0.32s cubic-bezier(0.2, 1.4, 0.4, 1); }
@@ -418,7 +434,7 @@
         .road-restart-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: linear-gradient(to bottom, #ff7675, #d63031); color: white; border: 2px solid white; border-radius: 14px; padding: 4px 16px; font-family: inherit; font-weight: 900; font-size: 12px; box-shadow: 0 4px 15px rgba(214, 48, 49, 0.6); cursor: pointer; z-index: 2500; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: none; }
         .road-restart-btn.show { display: block; transform: translate(-50%, -50%) scale(1); animation: pulseRestartBtn 1s infinite alternate; }
 
-        .game-area { flex: 1 1 auto; min-height: 0; padding: 6px 10px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+        .game-area { flex: 1 1 0; min-height: 0; overflow: hidden; contain: layout size; padding: 6px 10px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
         .shelves-grid { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: minmax(0, 1fr); gap: 10px; height: 100%; min-height: 0; overflow: hidden; }
         .shelf { background: var(--shelf-bg); border: 2px solid var(--shelf-border); border-top: 5px solid var(--cat-c, var(--shelf-border)); border-radius: 16px; padding: 8px; min-height: 0; height: 100%; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 5px; cursor: pointer; box-shadow: inset 0 2px 6px rgba(0,0,0,0.06); transition: transform 0.2s, background 0.2s, border-color 0.2s; overflow: hidden; overscroll-behavior: contain; touch-action: manipulation; }
         .shelf::-webkit-scrollbar { display: none; }
@@ -434,7 +450,7 @@
         .item.selected.ready::after { animation: none !important; box-shadow: none !important; border-color: transparent !important; } 
         .shelf.glowing { border-color: #ffeaa7; background: rgba(255, 234, 167, 0.4); transform: scale(1.02); box-shadow: 0 0 14px rgba(255,234,167,0.6); }
 
-        .controls-area { padding: 6px 12px 8px 12px; padding-bottom: 8px; display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.05); border-top: 1px solid var(--panel-border); flex-shrink: 0; position: relative; }
+        .controls-area { flex: 0 0 auto; padding: 6px 12px 8px 12px; padding-bottom: 8px; display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.05); border-top: 1px solid var(--panel-border); flex-shrink: 0; position: relative; }
         .actions-row { display: flex; gap: 8px; }
         .btn-action { flex: 1; padding: 10px; border: none; border-radius: 12px; font-family: inherit; font-weight: 900; font-size: 13px; color: white; box-shadow: 0 4px 0 rgba(0,0,0,0.2); cursor: pointer; transition: all 0.2s; position: relative;}
         .btn-action:active { transform: translateY(4px); box-shadow: none; }
@@ -2289,6 +2305,20 @@
             if (el) { e.preventDefault(); el.click(); }
         }, false);
     });
+    </script>
+    <script>
+    // Sayfanın dikey kaymasını tamamen engelle (yatay müşteri listesi hariç)
+    document.addEventListener('touchmove', function(e) {
+        var el = e.target;
+        while (el && el !== document.body) {
+            if (el.classList && el.classList.contains('customers-area')) return; // yatay kaydırma serbest
+            if (el.scrollHeight > el.clientHeight + 2 &&
+                getComputedStyle(el).overflowY === 'auto') return;
+            el = el.parentElement;
+        }
+        if (e.cancelable) e.preventDefault();
+    }, { passive: false });
+    window.addEventListener('scroll', function() { window.scrollTo(0, 0); }, { passive: true });
     </script>
 </body>
 </html>
