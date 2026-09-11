@@ -884,10 +884,9 @@
     <div class="overlay-screen" id="autoCatModal">
         <div class="glass-panel menu-card" style="max-width: 320px; background: rgba(255, 255, 255, 0.95); color: #2d3436;">
             <h2 style="margin:0; font-size: 20px; color: #6c5ce7;">⚡ Auto Category</h2>
-            <p style="font-size: 12px; font-weight: 800; margin: 4px 0; line-height: 1.4;">Click any item on the workbench to instantly send it to its matching shelf!</p>
+            <p style="font-size: 12px; font-weight: 800; margin: 4px 0; line-height: 1.4;">Click any item on the workbench to instantly send it to its matching shelf!<br><span style="opacity:.75;font-size:11px;">Free — just watch a short ad.</span></p>
             <div class="overlay-actions" style="margin-top: 10px;">
                 <button class="btn-primary" onclick="watchAdForAutoCat()">📺 Watch Ad (25 Mins Free)</button>
-                <button class="btn-promo" style="padding: 14px; border: none; border-radius: 16px; font-size: 15px; font-weight: bold; color: white; background: linear-gradient(to bottom, #fdcb6e, #e17055); box-shadow: 0 5px 0 #d35400; cursor: pointer; font-family: inherit;" onclick="buyLifetimeAutoCat()">💎 Lifetime Unlock (59.90 TL)</button>
                 <button class="btn-secondary" style="background:#b2bec3; box-shadow:0 4px 0 #636e72;" onclick="closeAutoCatModal()">Close</button>
             </div>
         </div>
@@ -1071,7 +1070,7 @@
         let tutorialTimer = null; let roadNotificationTimer = null; let bgmInterval = null; let pendingBankruptcyTimer = null; let deliveryInProgress = false;
         const BANKRUPTCY_GRACE_MS = 3000; const PROGRESS_KEY = 'toyMatchRush_single_save_v11';
 
-        function isAutoCatActive() { if (state.autoCatLifetime) return true; return Date.now() < state.autoCatExpiresAt; }
+        function isAutoCatActive() { return Date.now() < state.autoCatExpiresAt; }
 
         function serializeItemsContainer(cont) {
             let arr = []; if (!cont) return arr;
@@ -1238,7 +1237,7 @@
             let t = 3; cd.innerText = t; adOv.style.display = 'flex';
             let iv = setInterval(() => { t--; if (t > 0) { cd.innerText = t; playSound('pop'); } else { clearInterval(iv); adOv.style.display = 'none'; state.autoCatExpiresAt = Date.now() + (25 * 60 * 1000); state.autoCatOn = true; saveProgress(); applyLoadedSettingsToUI(); updateUI(); showRoadNotification("⚡ Auto Category Unlocked for 25 Mins!"); } }, 1000);
         }
-        function buyLifetimeAutoCat() { closeAutoCatModal(); state.autoCatLifetime = true; state.autoCatOn = true; saveProgress(); applyLoadedSettingsToUI(); updateUI(); playSound('shopChange'); showRoadNotification("💎 Auto Category Unlocked Forever!"); }
+        // Gerçek parayla satın alma kaldırıldı — Auto Category yalnızca reklam izleyerek açılır
 
         
         // ── Ana menü görselleri ─────────────────────────────────────
@@ -1746,6 +1745,7 @@
         function handleItemClick(d, e) {
             if (state.isBankrupt) return; playSound('pop');
             if (d.dataset.type === 'ready') {
+                if (deliveryInProgress) return;   // teslimat sürerken yeni tıklamayı yoksay
                 let requestedEmojis = []; state.orders.forEach(o => { if(!o.done) o.items.forEach(i => { if(i.cur < i.req) requestedEmojis.push(i.emoji); }); });
                 if (requestedEmojis.includes(d.dataset.emo)) {
                     let o = state.orders.find(x => !x.done && x.items.some(i=>i.emoji===d.dataset.emo && i.cur<i.req));
@@ -1817,6 +1817,11 @@
 
         function animateFlyingItemToCustomer(itemEl, orderId, callback, itemIndex) {
             deliveryInProgress = true;
+            // Emniyet: animasyon herhangi bir sebeple yarıda kalırsa kilidi aç
+            if (window._deliverySafety) clearTimeout(window._deliverySafety);
+            window._deliverySafety = setTimeout(function(){
+                if (deliveryInProgress) { deliveryInProgress = false; updateUI(); }
+            }, 2500);
             const rect = itemEl.getBoundingClientRect();
             const customerEl = document.getElementById('order-' + orderId);
             const emo = itemEl.dataset.emo;
